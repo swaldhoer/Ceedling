@@ -6,28 +6,18 @@ require 'fileutils'
 
 # Check for the main project file (either the one provided as argument,
 # defined in the ENV or the default)
-project_found = nil
 ARGV.each do |v|
   case(v)
     when /^--main_project_file=(\w+\.?\w*)/
       ENV['CEEDLING_MAIN_PROJECT_FILE'] = $1
-      main_filepath = ENV['CEEDLING_MAIN_PROJECT_FILE']
-      project_found = (!main_filepath.nil? && File.exist?(main_filepath))
-      if (!project_found)
-        raise "ERROR: Could not find specified project file '#{main_filepath}'"
-      else
-        main_filepath = File.expand_path(main_filepath)
-      end
       break
   end
 end
+main_filepath = ENV['CEEDLING_MAIN_PROJECT_FILE']
+project_found = (!main_filepath.nil? && File.exist?(main_filepath))
 if (!project_found)
-  main_filepath = ENV['CEEDLING_MAIN_PROJECT_FILE']
-  project_found = (!main_filepath.nil? && File.exist?(main_filepath))
-  if (!project_found)
-    main_filepath = "project.yml"
-    project_found = File.exist?(main_filepath)
-  end
+  main_filepath = "project.yml"
+  project_found = File.exist?(main_filepath)
 end
 
 def is_windows?
