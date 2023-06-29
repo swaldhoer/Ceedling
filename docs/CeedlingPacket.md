@@ -209,6 +209,8 @@ General notes:
    in which you'll run Rake, create an environment variable
    `CEEDLING_MAIN_PROJECT_FILE` with your desired project
    file path.
+   You can also provide a custom project file via
+   ``--main_project_path=<path/to/project.yml>``.
 
 3. To better understand Rake conventions, Rake execution,
    and Rakefiles, consult the [Rake tutorial, examples, and
@@ -241,6 +243,11 @@ Ceedling (more on this later).
   abort if run without arguments when no default task is defined. You can
   conveniently define a default task in the Rakefile discussed in the
   preceding setup & installation section of this document.
+
+* `ceedling --main_project_file=<main_project_file>`
+  Use the provided file as the main project file instead of the default
+  project file paths (environment variable `CEEDLING_MAIN_PROJECT_FILE` or
+  `<cwd>/project.yml`)
 
 * `ceedling -T`:
 
@@ -327,9 +334,9 @@ Ceedling (more on this later).
   / and \ are valid.
 
 * `ceedling test:* --test_case=<test_case_name> `
-  Execute test case which match **test_case_name**. Option available only after 
+  Execute test case which match **test_case_name**. Option available only after
   setting up **cmdline_args** to true under **test_runner** in project.yml:
-    
+
     ```
     :test_runner:
       :cmdline_args: true
@@ -353,9 +360,9 @@ Ceedling (more on this later).
   ---
 
 * `ceedling test:* --exclude_test_case=<test_case_name> `
-  Execute test case which does not match **test_case_name**. Option available only after 
+  Execute test case which does not match **test_case_name**. Option available only after
   setting up **cmdline_args** to true under **test_runner** in project.yml:
-    
+
     ```
     :test_runner:
       :cmdline_args: true
@@ -2312,7 +2319,7 @@ task :hello_world do
 end
 ```
 
-The task can now be called with: `ceedling hello_world` 
+The task can now be called with: `ceedling hello_world`
 
 Working with Non-Desktop Testing Environments
 ---------------------------------------------

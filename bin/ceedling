@@ -4,12 +4,30 @@
 require 'rubygems'
 require 'fileutils'
 
-# Check for the main project file (either the one defined in the ENV or the default)
-main_filepath = ENV['CEEDLING_MAIN_PROJECT_FILE']
-project_found = (!main_filepath.nil? && File.exist?(main_filepath))
+# Check for the main project file (either the one provided as argument,
+# defined in the ENV or the default)
+project_found = nil
+ARGV.each do |v|
+  case(v)
+    when /^--main_project_file=(\w+)/
+      ENV['CEEDLING_MAIN_PROJECT_FILE'] = $1
+      main_filepath = ENV['CEEDLING_MAIN_PROJECT_FILE']
+      project_found = (!main_filepath.nil? && File.exist?(main_filepath))
+      if (!project_found)
+        raise "ERROR: Could not find specified project file '#{main_filepath}'"
+      else
+        main_filepath = File.expand_path(main_filepath)
+      end
+      break
+  end
+end
 if (!project_found)
-  main_filepath = "project.yml"
-  project_found = File.exist?(main_filepath)
+  main_filepath = ENV['CEEDLING_MAIN_PROJECT_FILE']
+  project_found = (!main_filepath.nil? && File.exist?(main_filepath))
+  if (!project_found)
+    main_filepath = "project.yml"
+    project_found = File.exist?(main_filepath)
+  end
 end
 
 def is_windows?
@@ -295,9 +313,10 @@ else
   options[:which_ceedling] = yaml_options[:project][:which_ceedling] if (yaml_options[:project] && yaml_options[:project][:which_ceedling])
   options[:default_tasks]  = yaml_options[:default_tasks] if yaml_options[:default_tasks]
 
-  #sort through command line options
+  #sort through command line options (except for '--main_project_file')
   ARGV.each do |v|
     case(v)
+      next if /^--main_project_file=(\w+)/
       when /^(?:new|examples?|templates?)$/
         puts "\nOops. You called ceedling with argument '#{v}'.\n" +
              "      This is an operation that will create a new project... \n" +

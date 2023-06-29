@@ -76,3 +76,14 @@ jobs:
           cd examples/temp_sensor
           ceedling module:create[someNewModule] module:destroy[someNewModule] test:all
           cd ../..
+
+      # Check that custom configuraton paths can be used
+      - name: Run Tests for argument --main_project_file
+        run: |
+          cp -r ./examples/temp_sensor ./tests/args/--main_project_file
+          pushd tests/args/--main_project_file
+          mv project.yml my_project.yml
+          ceedling --main_project_file=my_project.yml module:create[someNewModule] module:destroy[someNewModule] test:all
+          ceedling clean
+          popd
+          ceedling --main_project_file=tests/args/--main_project_file/my_project.yml module:create[someNewModule] module:destroy[someNewModule] test:all
