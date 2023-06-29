@@ -9,7 +9,7 @@ require 'fileutils'
 project_found = nil
 ARGV.each do |v|
   case(v)
-    when /^--main_project_file=(\w+)/
+    when /^--main_project_file=(\w+\.?\w*)/
       ENV['CEEDLING_MAIN_PROJECT_FILE'] = $1
       main_filepath = ENV['CEEDLING_MAIN_PROJECT_FILE']
       project_found = (!main_filepath.nil? && File.exist?(main_filepath))
