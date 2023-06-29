@@ -316,7 +316,8 @@ else
   #sort through command line options (except for '--main_project_file')
   ARGV.each do |v|
     case(v)
-      next if /^--main_project_file=(\w+)/
+      when /^--main_project_file=(\w+)/
+        next
       when /^(?:new|examples?|templates?)$/
         puts "\nOops. You called ceedling with argument '#{v}'.\n" +
              "      This is an operation that will create a new project... \n" +
